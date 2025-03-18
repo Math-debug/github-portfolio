@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.js": "/github-portfolio/static/js/main.2e910574.js",
+    "static/js/109.4ea8f007.js": "/github-portfolio/static/js/109.4ea8f007.js",
+    "static/media/FontAwesome.ttf": "/github-portfolio/static/media/FontAwesome.1e59d2330b4c6deb84b3.ttf",
+    "index.html": "/github-portfolio/index.html",
+    "serve.json": "/github-portfolio/serve.json",
+    "manifest.json": "/github-portfolio/manifest.json",
+    "main.2e910574.js.map": "/github-portfolio/static/js/main.2e910574.js.map",
+    "109.4ea8f007.js.map": "/github-portfolio/static/js/109.4ea8f007.js.map"
+  },
+  "entrypoints": [
+    "static/js/109.4ea8f007.js",
+    "static/js/main.2e910574.js"
+  ]
+}
