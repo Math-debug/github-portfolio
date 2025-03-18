@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.js": "/github-portfolio/static/js/main.96f6407b.js",
+    "main.js": "/github-portfolio/static/js/main.edb8b480.js",
     "static/js/109.af6c7614.js": "/github-portfolio/static/js/109.af6c7614.js",
     "static/media/FontAwesome.ttf": "/github-portfolio/static/media/FontAwesome.1e59d2330b4c6deb84b3.ttf",
     "index.html": "/github-portfolio/index.html",
     "serve.json": "/github-portfolio/serve.json",
     "manifest.json": "/github-portfolio/manifest.json",
-    "main.96f6407b.js.map": "/github-portfolio/static/js/main.96f6407b.js.map",
+    "main.edb8b480.js.map": "/github-portfolio/static/js/main.edb8b480.js.map",
     "109.af6c7614.js.map": "/github-portfolio/static/js/109.af6c7614.js.map"
   },
   "entrypoints": [
     "static/js/109.af6c7614.js",
-    "static/js/main.96f6407b.js"
+    "static/js/main.edb8b480.js"
   ]
 }
