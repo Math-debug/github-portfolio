@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -7,47 +7,57 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
-import { Text, Card, Button, Surface, ActivityIndicator, useTheme } from 'react-native-paper';
+import { Text, Button, Surface, useTheme, Chip, Divider } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
-import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-interface Repository {
-  id: number;
-  name: string;
-  description: string;
-  language: string;
-  html_url: string;
-  stargazers_count: number;
-}
+type RootStackParamList = {
+  'Início': undefined;
+  'Repositórios': undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function HomeScreen() {
-  const [repositories, setRepositories] = useState<Repository[]>([]);
-  const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
   const theme = useTheme();
+  const navigation = useNavigation<NavigationProp>();
 
-  useEffect(() => {
-    fetchRepositories();
-  }, []);
+  const skills = [
+    { name: 'Vue.js', icon: ({ size, color }) => <FontAwesome name="code" size={size} color={color} />, color: '#41B883' },
+    { name: 'React', icon: ({ size, color }) => <FontAwesome name="code" size={size} color={color} />, color: '#61DAFB' },
+    { name: 'React Native', icon: ({ size, color }) => <FontAwesome name="mobile" size={size} color={color} />, color: '#61DAFB' },
+    { name: 'SpringBoot', icon: ({ size, color }) => <FontAwesome name="leaf" size={size} color={color} />, color: '#6DB33F' },
+    { name: 'Quarkus', icon: ({ size, color }) => <FontAwesome name="bolt" size={size} color={color} />, color: '#4695EB' },
+    { name: 'Java', icon: ({ size, color }) => <FontAwesome name="coffee" size={size} color={color} />, color: '#007396' },
+    { name: 'TypeScript', icon: ({ size, color }) => <FontAwesome name="code" size={size} color={color} />, color: '#3178C6' },
+    { name: 'JavaScript', icon: ({ size, color }) => <FontAwesome name="code" size={size} color={color} />, color: '#F7DF1E' },
+    { name: 'Docker', icon: ({ size, color }) => <FontAwesome name="cubes" size={size} color={color} />, color: '#2496ED' },
+    { name: 'AWS', icon: ({ size, color }) => <FontAwesome name="cloud" size={size} color={color} />, color: '#FF9900' },
+    { name: 'Git', icon: ({ size, color }) => <FontAwesome name="code-fork" size={size} color={color} />, color: '#F05032' }
+  ];
 
-  const fetchRepositories = async () => {
-    try {
-      const response = await axios.get('https://api.github.com/users/Math-debug/repos');
-      setRepositories(response.data);
-    } catch (error) {
-      console.error('Erro ao buscar repositórios:', error);
-    } finally {
-      setLoading(false);
+  const experiences = [
+    {
+      title: 'Desenvolvedor Full Stack Pleno',
+      company: 'Softplan',
+      period: '10/2023 - Presente',
+      description: 'Desenvolvimento de soluções na área jurídica, trabalhando com tecnologias como Vue.js, SpringBoot, Quarkus e Nest.js.'
+    },
+    {
+      title: 'Desenvolvedor Full Stack Júnior',
+      company: 'Compsis',
+      period: '02/2022 - 10/2023',
+      description: 'Desenvolvimento de microsserviços com SpringBoot. Implementação de APIs RESTful e integração com sistemas legados.'
+    },
+    {
+      title: 'Líder de Suporte Técnico',
+      company: 'Tudo de Bicho',
+      period: '09/2020 - 02/2022',
+      description: 'Liderança de equipe de suporte técnico, responsabilidades incluem solução de problemas, monitoramento de sistemas e coordenação de equipes.'
     }
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  ];
 
   return (
     <ScrollView style={styles.container}>
@@ -57,7 +67,13 @@ export default function HomeScreen() {
           style={styles.avatar}
         />
         <Text variant="headlineLarge" style={styles.title}>Matheus</Text>
-        <Text variant="bodyLarge" style={styles.subtitle}>Desenvolvedor de Software</Text>
+        <Text variant="bodyLarge" style={styles.subtitle}>Desenvolvedor Full Stack</Text>
+        
+        <Text style={styles.bio}>
+          Desenvolvedor apaixonado por criar soluções elegantes e eficientes. 
+          Especializado em desenvolvimento web e mobile com experiência em Vue.js, React, 
+          SpringBoot, Quarkus e tecnologias cloud.
+        </Text>
         
         <View style={styles.socialButtonsContainer}>
           <Button
@@ -66,7 +82,7 @@ export default function HomeScreen() {
               <FontAwesome name="github" size={size} color={color} />
             )}
             onPress={() => Linking.openURL('https://github.com/Math-debug')}
-            style={styles.socialButton}
+            style={[styles.socialButton, styles.githubButton]}
           >
             GitHub
           </Button>
@@ -81,44 +97,47 @@ export default function HomeScreen() {
           >
             LinkedIn
           </Button>
+          
+          <Button
+            mode="contained"
+            icon={({ size, color }) => (
+              <FontAwesome name="code-fork" size={size} color={color} />
+            )}
+            onPress={() => navigation.navigate('Repositórios')}
+            style={[styles.socialButton, { backgroundColor: '#6200EA' }]}
+          >
+            Repositórios
+          </Button>
         </View>
       </Surface>
 
-      <Text variant="headlineMedium" style={styles.sectionTitle}>Meus Projetos</Text>
+      <View style={styles.section}>
+        <Text variant="headlineMedium" style={styles.sectionTitle}>Tecnologias</Text>
+        <View style={styles.skillsContainer}>
+          {skills.map((skill, index) => (
+            <Chip 
+              key={index} 
+              icon={skill.icon}
+              style={[styles.skillChip, { backgroundColor: skill.color + '20' }]}
+              textStyle={{ color: skill.color }}
+            >
+              {skill.name}
+            </Chip>
+          ))}
+        </View>
+      </View>
       
-      <View style={styles.projectsGrid}>
-        {repositories.map((repo) => (
-          <Card
-            key={repo.id}
-            style={[styles.card, { width: width > 768 ? '45%' : '100%' }]}
-            onPress={() => Linking.openURL(repo.html_url)}
-          >
-            <Card.Content>
-              <View style={styles.cardHeader}>
-                <FontAwesome name="code-fork" size={16} color="#666" style={styles.cardIcon} />
-                <Text variant="titleLarge">{repo.name}</Text>
-              </View>
-              {repo.description && (
-                <Text variant="bodyMedium" style={styles.description}>
-                  {repo.description}
-                </Text>
-              )}
-              {repo.language && (
-                <View style={styles.languageContainer}>
-                  <FontAwesome name="code" size={14} color="#0366d6" style={styles.languageIcon} />
-                  <Text variant="bodyMedium" style={styles.language}>
-                    {repo.language}
-                  </Text>
-                </View>
-              )}
-              <View style={styles.starsContainer}>
-                <FontAwesome name="star" size={14} color="#f1c40f" style={styles.starsIcon} />
-                <Text variant="bodySmall" style={styles.stars}>
-                  {repo.stargazers_count}
-                </Text>
-              </View>
-            </Card.Content>
-          </Card>
+      <Divider style={styles.divider} />
+      
+      <View style={styles.section}>
+        <Text variant="headlineMedium" style={styles.sectionTitle}>Experiência Profissional</Text>
+        {experiences.map((exp, index) => (
+          <Surface key={index} style={styles.experienceCard} elevation={1}>
+            <Text variant="titleLarge" style={styles.experienceTitle}>{exp.title}</Text>
+            <Text variant="titleMedium" style={styles.experienceCompany}>{exp.company}</Text>
+            <Text variant="labelLarge" style={styles.experiencePeriod}>{exp.period}</Text>
+            <Text style={styles.experienceDescription}>{exp.description}</Text>
+          </Surface>
         ))}
       </View>
     </ScrollView>
@@ -129,11 +148,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   header: {
     padding: 32,
@@ -153,69 +167,76 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginBottom: 16,
-    color: '#666',
+    color: '#333',
+    fontWeight: '600',
+  },
+  bio: {
+    textAlign: 'center',
+    marginHorizontal: 16,
+    marginBottom: 16,
+    lineHeight: 22,
+    color: '#555',
   },
   socialButtonsContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
     width: '100%',
-    marginTop: 8,
+    marginTop: 16,
   },
   socialButton: {
     marginHorizontal: 8,
+    marginBottom: 8,
   },
   linkedinButton: {
     backgroundColor: '#0077B5',
   },
   githubButton: {
-    marginTop: 8,
+    backgroundColor: '#000000',
+  },
+  section: {
+    marginBottom: 24,
   },
   sectionTitle: {
     padding: 16,
     fontWeight: 'bold',
+    color: '#000',
   },
-  projectsGrid: {
+  skillsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    padding: 8,
+    paddingHorizontal: 16,
+    justifyContent: 'flex-start',
   },
-  card: {
-    margin: 8,
-    backgroundColor: '#fff',
+  skillChip: {
+    margin: 4,
   },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  divider: {
+    height: 1,
+    marginHorizontal: 16,
+    marginVertical: 8,
+  },
+  experienceCard: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    padding: 16,
+    borderRadius: 8,
+  },
+  experienceTitle: {
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  experienceCompany: {
+    color: '#333',
+    marginTop: 4,
+  },
+  experiencePeriod: {
+    color: '#666',
+    marginTop: 4,
     marginBottom: 8,
   },
-  cardIcon: {
-    marginRight: 8,
-  },
-  description: {
-    marginTop: 8,
-    color: '#666',
-  },
-  languageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  language: {
-    color: '#0366d6',
-  },
-  languageIcon: {
-    marginRight: 6,
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  starsIcon: {
-    marginRight: 6,
-  },
-  stars: {
-    color: '#666',
+  experienceDescription: {
+    color: '#444',
+    lineHeight: 20,
   },
 });
